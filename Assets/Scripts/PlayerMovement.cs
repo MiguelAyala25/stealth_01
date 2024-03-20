@@ -64,6 +64,12 @@ public class PlayerMovement : MonoBehaviour
             rb.drag = groundDrag;
         else
             rb.drag = 0;
+
+        if (this.transform.position.y <= -10.0f)
+        {
+            RestartScene();
+        }
+
     }
 
     private void FixedUpdate()
@@ -90,7 +96,6 @@ public class PlayerMovement : MonoBehaviour
     private void MovePlayer()
     {
         //running check and speed setting
-
 
         if(isRunning)
         {
@@ -143,8 +148,15 @@ public class PlayerMovement : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("enemy"))
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            RestartScene();
         }
     }
+
+    private void RestartScene()
+    {
+        GameManager.Instance.time = GameManager.Instance.initialTime;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
 
 }

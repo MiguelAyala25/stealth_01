@@ -203,7 +203,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
+  m_Speed: 17.5
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -239,7 +239,7 @@ MonoBehaviour:
   - {fileID: 2423010993324734378}
   - {fileID: 2423010992790981653}
   - {fileID: 2423010992665383690}
-  sightRange: 5
+  sightRange: 2.5
   chaseRange: 25
   hearingRange: 20
 --- !u!1 &2423010993720674992
