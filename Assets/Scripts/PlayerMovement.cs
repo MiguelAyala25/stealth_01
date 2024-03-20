@@ -2,9 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
+
+    [SerializeField] private AudioSource audioSource;
+
     [Header("Movement")]
     [SerializeField] private float walkSpeed;
     [SerializeField] private float runSpeed;
@@ -16,7 +20,7 @@ public class PlayerMovement : MonoBehaviour
 
     //checks
     private bool readyToJump;
-    private bool isRunning;
+    private bool isRunning = false;
 
     [Header("Keybinds")]
     private KeyCode jumpKey = KeyCode.Space;
@@ -39,6 +43,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
 
@@ -52,6 +57,8 @@ public class PlayerMovement : MonoBehaviour
 
         MyInput();
         SpeedControl();
+
+        GameManager.Instance.IsPlayerRunning = isRunning;
 
         if (grounded)
             rb.drag = groundDrag;
@@ -83,8 +90,20 @@ public class PlayerMovement : MonoBehaviour
     private void MovePlayer()
     {
         //running check and speed setting
-        moveSpeed = isRunning ? runSpeed : walkSpeed;
 
+
+        if(isRunning)
+        {
+            moveSpeed = runSpeed;
+            if (!audioSource.isPlaying)
+            {
+                audioSource.Play();
+            }
+        }
+        else
+        {
+            moveSpeed = walkSpeed;
+        }
         // calculate movement direction
 
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
@@ -118,6 +137,14 @@ public class PlayerMovement : MonoBehaviour
     private void ResetJump()
     {
         readyToJump = true;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("enemy"))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
     }
 
 }
